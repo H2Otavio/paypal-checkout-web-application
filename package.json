@@ -1,4 +1,14 @@
 {
+  "name": "sua-aplicacao",
+  "version": "1.0.0",
+  "description": "Descrição da sua aplicação",
+  "main": "server.js",
+  "engines": {
+    "node": "14.18.0"
+  },
+  "scripts": {
+    "start": "node server.js"
+  },
   "dependencies": {
     "braintree": "^3.16.0",
     "ejs": "^3.1.9",

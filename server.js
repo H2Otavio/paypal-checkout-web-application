@@ -4,7 +4,7 @@ const paypalConfig = require('./config/paypal-config'); // Importando as configu
 const braintree = require('braintree');
 
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 const path = require('path');
 const productsData = require('./data/products.json');
