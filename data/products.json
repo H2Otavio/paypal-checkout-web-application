@@ -1,0 +1,23 @@
+[
+    {
+      "id": 1,
+      "name": "Faqueiro em Aço Inox Búzios com 24 Peças",
+      "description": "Encante seus amigos e familiares com o Faqueiro Tramontina Búzios em Aço Inox com Detalhe 24 Peças! Produzido totalmente em aço inox, o faqueiro além de ser resistente e durável, deixa a composição da sua mesa ainda mais especial, pois as peças que compõem o jogo possuem um lindo acabamento, garantindo um charme a mais para a refeição. As peças ainda são fáceis de limpar e podem ser lavadas na máquina de lavar louças. A escolha perfeita para saborear as melhores receitas! ",
+      "price": 60.90,
+      "image": "/images/faqueiro.jpg"
+    },
+    {
+      "id": 2,
+      "name": "Produto 2",
+      "description": "Descrição do produto 2",
+      "price": 19.99,
+      "image": "product2.jpg"
+    },
+    {
+      "id": 3,
+      "name": "Produto 3",
+      "description": "Descrição do produto 3",
+      "price": 25.99,
+      "image": "product3.jpg"
+    }
+]  

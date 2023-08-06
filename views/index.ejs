@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Simple Shopping Cart</title>
+  <script src="https://js.braintreegateway.com/web/dropin/1.31.0/js/dropin.min.js"></script>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <div class="container">
+    <div class="product div1">
+      <h1>Simple Shopping Cart</h1>
+      <div>
+        <p>Product: Sample Product</p>
+        <p>Item Number: 123456789</p>
+        <p>Price: $10,00</p>
+      </div>
+    </div>
+
+    <div class="div2">
+      <form action="/pay" method="post" id="checkout-form"> <!-- Adicione o formulário aqui -->
+          <h2>Buyer Information</h2>
+          <input type="text" id="firstName" name="firstName" placeholder="First Name" required>
+          <input type="text" id="lastName" name="lastName" placeholder="Last Name" required>
+          <input type="email" id="email" name="email" placeholder="Email" required>
+          <input type="tel" id="phone" name="phone" placeholder="Phone Number" required>
+          <input type="text" id="addressLine1" name="addressLine1" placeholder="Address Line 1" value="9329 Holly Ave." required>
+          <input type="text" id="addressLine2" name="addressLine2" placeholder="Address Line 2">
+          <input type="text" id="state" name="state" placeholder="State/Province" value="Egg Harbor Township, NJ" required>
+          <input type="text" id="zip" name="zip" placeholder="Zip/Postal Code" value="08234" required>
+          <input type="text" id="country" name="country" placeholder="Country" value="US" required>
+          <div id="dropin-container"></div>
+          <input type="hidden" id="payment_method_nonce" name="payment_method_nonce">
+          <button type="submit" style="margin: 5px;">Submit Payment</button>
+          <div id="paypal-buttons"></button></div>
+        </form>
+    </div>
+  </div>
+
+  <!-- Renderizando o script do PayPal com o clientId dinamicamente -->
+  <script>
+    const clientId = '<%= paypal.clientId %>';
+    const paypalScript = `https://www.paypal.com/sdk/js?client-id=${clientId}`;
+    document.write(`<script src="${paypalScript}"><\/script>`);
+  </script>
+  <script src="js/script.js"></script>
+  <script>
+    const clientToken = '<%= clientToken %>';
+    document.addEventListener('DOMContentLoaded', () => {
+      const form = document.querySelector('#checkout-form');
+      console.log(form.dropinInstance)
+      const container = document.querySelector('#dropin-container');
+
+      form.addEventListener('submit', (event) => {
+        event.preventDefault();
+  
+        braintree.dropin.create(
+        {
+          authorization: '<%= clientToken %>',
+          container: '#dropin-container',
+        },
+        (error, dropinInstance) => {
+          if (error) {
+            // Tratar erro ao inicializar o formulário de pagamento
+            console.error('Erro ao inicializar o formulário de pagamento:', error);
+            return;
+          }
+
+          form.dropinInstance = dropinInstance;
+        }
+        );
+        if (form.dropinInstance) {
+          // Envie o pagamento usando o dropinInstance
+          form.dropinInstance.requestPaymentMethod((error, payload) => {
+            if (error) {
+              console.error('Erro ao obter o método de pagamento:', error);
+              return;
+            }
+            console.log('Payload de pagamento:', payload);
+
+            // Preencha as informações do comprador no formulário do PayPal
+            const payerInfo = {
+              email: payload.details.email,
+              given_name: payload.details.firstName,
+              surname: payload.details.lastName,
+              address: {
+                line1: payload.details.addressLine1,
+                // Adicione outras informações de endereço conforme necessário
+              },
+              // Adicione outros campos de informações do comprador conforme necessário
+            };
+            
+            // Crie um campo hidden no formulário com as informações do comprador
+            const hiddenInput = document.createElement('input');
+            hiddenInput.setAttribute('type', 'hidden');
+            hiddenInput.setAttribute('name', 'payerInfo');
+            hiddenInput.setAttribute('value', JSON.stringify(payerInfo));
+            form.appendChild(hiddenInput);
+
+            // Obtenha o payment_method_nonce do Drop-in do Braintree
+            // e atribua-o ao campo hidden do formulário
+            const paymentMethodNonce = payload.nonce;
+            console.log(paymentMethodNonce)
+            document.querySelector('#payment_method_nonce').value = paymentMethodNonce;
+            // Envie o formulário para o servidor
+            form.submit();
+
+            // window.location.href = '/thank-you';
+          });
+        }
+      });
+    });
+  </script>
+</body>
+</html>

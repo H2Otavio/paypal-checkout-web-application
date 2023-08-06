@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Catálogo de Produtos</title>
+  <link rel="stylesheet" href="/public/css/style.css">
+</head>
+<body>
+  <h1>Catálogo de Produtos</h1>
+  <ul>
+    <% products.forEach(product => { %>
+      <li class="catalog-item">
+        <img src="<%= product.image %>" alt="<%= product.name %>">
+        <h2><%= product.name %></h2>
+        <p><%= product.description %></p>
+        <p>Preço: R$ <%= product.price.toFixed(2) %></p>
+        <form action="/pay" method="post"> <!-- Adicione o formulário aqui -->
+          <input type="text" name="firstName" placeholder="First Name" required>
+          <input type="text" name="lastName" placeholder="Last Name" required>
+          <input type="email" name="email" placeholder="Email" required>
+          <input type="tel" name="phone" placeholder="Phone Number" required>
+          <input type="text" name="addressLine1" placeholder="Address Line 1" required>
+          <input type="text" name="addressLine2" placeholder="Address Line 2">
+          <input type="text" name="state" placeholder="State/Province" required>
+          <input type="text" name="zip" placeholder="Zip/Postal Code" required>
+          <input type="text" name="country" placeholder="Country" required>
+          <button type="submit">Submit Payment</button>
+        </form>
+        <a href="/product/<%= product.id %>">Adicionar ao carrinho</a>
+      </li>
+    <% }) %>
+  </ul>
+</body>
+</html>
