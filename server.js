@@ -47,9 +47,9 @@ app.get('/', (req, res) => {
       },
     },
     redirect_urls: {
-        thank_you_url: 'http://localhost:3000/thank-you',
-        return_url: 'http://localhost:3000/success',
-        cancel_url: 'http://localhost:3000/cancel',
+        thank_you_url: 'http://localhost:'+PORT+'/thank-you',
+        return_url: 'http://localhost:'+PORT+'/success',
+        cancel_url: 'http://localhost:'+PORT+'/cancel',
     },
     transactions: [
       {
@@ -89,8 +89,8 @@ app.post('/pay', (req, res) => {
       payment_method: 'paypal',
     },
     redirect_urls: {
-      return_url: 'http://localhost:3000/success',
-      cancel_url: 'http://localhost:3000/cancel',
+      return_url: 'http://localhost:'+PORT+'/success',
+      cancel_url: 'http://localhost:'+PORT+'/cancel',
     },
     transactions: [
       {
