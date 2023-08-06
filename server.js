@@ -4,6 +4,7 @@ const paypalConfig = require('./config/paypal-config'); // Importando as configu
 const braintree = require('braintree');
 
 const app = express();
+const URL = process.env.URL || 'http://localhost:';
 const PORT = process.env.PORT || 3000;
 
 const path = require('path');
@@ -47,9 +48,9 @@ app.get('/', (req, res) => {
       },
     },
     redirect_urls: {
-        thank_you_url: 'http://localhost:'+PORT+'/thank-you',
-        return_url: 'http://localhost:'+PORT+'/success',
-        cancel_url: 'http://localhost:'+PORT+'/cancel',
+        thank_you_url: URL+PORT+'/thank-you',
+        return_url: URL+PORT+'/success',
+        cancel_url: URL+PORT+'/cancel',
     },
     transactions: [
       {
@@ -89,8 +90,8 @@ app.post('/pay', (req, res) => {
       payment_method: 'paypal',
     },
     redirect_urls: {
-      return_url: 'http://localhost:'+PORT+'/success',
-      cancel_url: 'http://localhost:'+PORT+'/cancel',
+      return_url: URL+PORT+'/success',
+      cancel_url: URL+PORT+'/cancel',
     },
     transactions: [
       {
