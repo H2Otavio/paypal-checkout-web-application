@@ -90,7 +90,7 @@ app.post('/pay', (req, res) => {
       payment_method: 'paypal',
     },
     redirect_urls: {
-      return_url: URL+PORT+'/success',
+      return_url: URL+'/success',
       cancel_url: URL+PORT+'/cancel',
     },
     transactions: [
