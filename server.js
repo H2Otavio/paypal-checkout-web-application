@@ -49,7 +49,7 @@ app.get('/', (req, res) => {
     },
     redirect_urls: {
         thank_you_url: URL+PORT+'/thank-you',
-        return_url: URL+PORT+'/success',
+        return_url: URL+'/success',
         cancel_url: URL+PORT+'/cancel',
     },
     transactions: [
@@ -128,27 +128,7 @@ app.get('/success', (req, res) => {
    const payerId = req.query.PayerID;
    const paymentId = req.query.paymentId;
 
-
    res.render('success', { payerId, paymentId });  
-});
-
-app.get('/', (req, res) => {
-  const paymentId = req.query.paymentId;
-  const payerId = req.query.PayerID;
-
-  const executePaymentData = {
-    payer_id: payerId,
-  };
-
-  paypal.payment.execute(paymentId, executePaymentData, (error, payment) => {
-    if (error) {
-      console.error(error);
-      return res.redirect('/cancel');
-    }
-
-    // Payment successful, show a success page
-    res.render('success', { payment });
-  });
 });
 
 // Defina a rota para a página de agradecimento após a conclusão da transação
@@ -162,35 +142,6 @@ app.get('/', (req, res) => {
   res.render('cancel');
 });
 
-app.post('/process-payment', (req, res) => {
-  const nonceFromTheClient = req.body.paymentMethodNonce;
-
-  // Use o nonce recebido para criar a transação no Braintree
-  gateway.transaction.sale(
-    {
-      amount: '10.00',
-      paymentMethodNonce: nonceFromTheClient,
-      options: {
-        submitForSettlement: true,
-      },
-      shipping: {
-        firstName: req.body.firstName,
-        lastName: req.body.lastName,
-        email: req.body.email,
-        // Adicione outros campos de informações do comprador conforme necessário
-      },
-    },
-    (error, result) => {
-      if (result.success) {
-        // O pagamento foi bem-sucedido
-        res.json({ success: true, transactionId: result.transaction.id });
-      } else {
-        // O pagamento falhou
-        res.json({ success: false });
-      }
-    }
-  );
-});
 
 // Start the server
 app.listen(PORT, () => {
